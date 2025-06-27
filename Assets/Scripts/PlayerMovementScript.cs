@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 public class PlayerMovementScript : MonoBehaviour
 {
     public float moveSpeed = 10f;
-    public float jumpForce = 30f;
-    public float gravityScale = 10f;
+    public float jumpForce = 25f;
+    public float gravityScale = 8f;
     public float fallingGravityScale = 12f;
 
     float jumpBufferTime = 0.2f;

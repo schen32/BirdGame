@@ -2109,8 +2109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  jumpForce: 30
-  gravityScale: 10
+  jumpForce: 25
+  gravityScale: 8
   fallingGravityScale: 12
 --- !u!114 &500972762
 MonoBehaviour:
