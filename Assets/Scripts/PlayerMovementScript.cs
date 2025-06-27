@@ -3,31 +3,78 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementScript : MonoBehaviour
 {
-    public Vector2 moveSpeed;
+    public float moveSpeed = 10f;
+    public float jumpForce = 30f;
+    public float gravityScale = 10f;
+    public float fallingGravityScale = 12f;
+
     Vector2 moveInput;
     Rigidbody2D rb;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    bool canJump = false;
+    bool jumpPressed = false;
+
     void Start()
     {
-        moveSpeed = new Vector2(300, 300);
         rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = gravityScale;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        float xVelocity = moveInput.x * moveSpeed.x * Time.deltaTime;
-        float yVelocity = moveInput.y * moveSpeed.y * Time.deltaTime;
-
-        rb.linearVelocityX = xVelocity;
-        if (yVelocity > 0)
+        // Horizontal movement
+        float xVelocity = 0;
+        if (moveInput.x > 0)
         {
-            rb.linearVelocityY = yVelocity;
+            xVelocity = moveSpeed;
+        }
+        else if (moveInput.x < 0)
+        {
+            xVelocity = -moveSpeed;
+        }
+            rb.linearVelocityX = xVelocity;
+
+        // Jump (only once per press)
+        if (jumpPressed && canJump)
+        {
+            rb.linearVelocityY = jumpForce;
+            canJump = false;
+            jumpPressed = false; // consume the press
+        }
+
+        // Gravity adjustment
+        if (rb.linearVelocityY >= 0)
+        {
+            rb.gravityScale = gravityScale;
+        }
+        else if (rb.linearVelocityY < 0)
+        {
+            rb.gravityScale = fallingGravityScale;
         }
     }
 
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+    }
+
+    public void OnJump(InputValue value)
+    {
+        // Only trigger on key down, not hold
+        if (value.isPressed)
+        {
+            jumpPressed = true;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y > 0.5f)
+            {
+                canJump = true;
+                break;
+            }
+        }
     }
 }
