@@ -8,20 +8,24 @@ public class PlayerMovementScript : MonoBehaviour
     public float gravityScale = 10f;
     public float fallingGravityScale = 12f;
 
-    public float jumpBufferTime = 0.2f;
+    float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
 
-    public float coyoteTime = 0.1f; // Optional: allows jump shortly after falling
+    float coyoteTime = 0.1f; // Optional: allows jump shortly after falling
     float coyoteTimeCounter = 0f;
     bool isGrounded = false;
 
     Vector2 moveInput;
     Rigidbody2D rb;
+    Animator animator;
+    SpriteRenderer spriteRenderer;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void FixedUpdate()
@@ -45,12 +49,14 @@ public class PlayerMovementScript : MonoBehaviour
         if (moveInput.x > 0)
         {
             xVelocity = moveSpeed;
+            spriteRenderer.flipX = false;
         }
         else if (moveInput.x < 0)
         {
             xVelocity = -moveSpeed;
+            spriteRenderer.flipX = true;
         }
-            rb.linearVelocityX = xVelocity;
+        rb.linearVelocityX = xVelocity;
 
         // Jump (only once per press)
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
@@ -60,6 +66,8 @@ public class PlayerMovementScript : MonoBehaviour
             coyoteTimeCounter = 0;
             isGrounded = false;
         }
+        animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocityX));
+        animator.SetFloat("yVelocity", Mathf.Abs(rb.linearVelocityY));
 
         // Gravity adjustment
         if (rb.linearVelocityY >= 0)
@@ -94,7 +102,6 @@ public class PlayerMovementScript : MonoBehaviour
             {
                 isGrounded = true;
                 coyoteTimeCounter = coyoteTime;
-                break;
             }
         }
     }
