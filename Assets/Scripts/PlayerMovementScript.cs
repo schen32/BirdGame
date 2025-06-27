@@ -8,10 +8,15 @@ public class PlayerMovementScript : MonoBehaviour
     public float gravityScale = 10f;
     public float fallingGravityScale = 12f;
 
+    public float jumpBufferTime = 0.2f;
+    float jumpBufferCounter = 0f;
+
+    public float coyoteTime = 0.1f; // Optional: allows jump shortly after falling
+    float coyoteTimeCounter = 0f;
+    bool isGrounded = false;
+
     Vector2 moveInput;
     Rigidbody2D rb;
-    bool canJump = false;
-    bool jumpPressed = false;
 
     void Start()
     {
@@ -21,6 +26,20 @@ public class PlayerMovementScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Update timers
+        if (jumpBufferCounter > 0)
+        {
+            jumpBufferCounter -= Time.fixedDeltaTime;
+        }
+        if (isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.fixedDeltaTime;
+        }
+
         // Horizontal movement
         float xVelocity = 0;
         if (moveInput.x > 0)
@@ -34,11 +53,12 @@ public class PlayerMovementScript : MonoBehaviour
             rb.linearVelocityX = xVelocity;
 
         // Jump (only once per press)
-        if (jumpPressed && canJump)
+        if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
         {
             rb.linearVelocityY = jumpForce;
-            canJump = false;
-            jumpPressed = false; // consume the press
+            jumpBufferCounter = 0;
+            coyoteTimeCounter = 0;
+            isGrounded = false;
         }
 
         // Gravity adjustment
@@ -62,7 +82,7 @@ public class PlayerMovementScript : MonoBehaviour
         // Only trigger on key down, not hold
         if (value.isPressed)
         {
-            jumpPressed = true;
+            jumpBufferCounter = jumpBufferTime;
         }
     }
 
@@ -70,11 +90,18 @@ public class PlayerMovementScript : MonoBehaviour
     {
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            if (contact.normal.y > 0.5f)
+            if (contact.normal.y > 0.7f)
             {
-                canJump = true;
+                isGrounded = true;
+                coyoteTimeCounter = coyoteTime;
                 break;
             }
         }
     }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        isGrounded = false;
+    }
+
 }
