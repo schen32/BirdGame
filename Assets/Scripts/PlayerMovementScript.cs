@@ -10,6 +10,9 @@ public class PlayerMovementScript : MonoBehaviour
     public float gravityScale;
     public float fallingGravityScale;
 
+    public Vector2 jumpLeftForce;
+    public Vector2 jumpRightForce;
+
     float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
 
@@ -30,6 +33,9 @@ public class PlayerMovementScript : MonoBehaviour
 
         gravityScale = 8f;
         fallingGravityScale = 16f;
+
+        jumpLeftForce = new Vector2(-2, 2);
+        jumpRightForce = new Vector2(2, 2);
 
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
@@ -103,7 +109,17 @@ public class PlayerMovementScript : MonoBehaviour
     {
         // Only trigger on key down, not hold
         jumpBufferCounter = jumpBufferTime;
-        
+    }
+    public void OnJumpLeft()
+    {
+        rb.AddForce(jumpForce * jumpLeftForce, ForceMode2D.Impulse);
+        isGrounded = false;
+    }
+
+    public void OnJumpRight()
+    {
+        rb.AddForce(jumpForce * jumpRightForce, ForceMode2D.Impulse);
+        isGrounded = false;
     }
 
     public void OnAttack(InputValue value)
