@@ -28,6 +28,7 @@ public class PlayerMovementScript : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
     SpriteRenderer spriteRenderer;
+    public ParticleSystem jumpParticles;
 
     void Start()
     {
@@ -113,6 +114,8 @@ public class PlayerMovementScript : MonoBehaviour
 
         rb.AddForce(jumpForce * jumpLeftForce, ForceMode2D.Impulse);
         usedLeftJump = true;
+
+        playParticles(45);
     }
 
     public void OnJumpRight()
@@ -121,6 +124,8 @@ public class PlayerMovementScript : MonoBehaviour
 
         rb.AddForce(jumpForce * jumpRightForce, ForceMode2D.Impulse);
         usedRightJump = true;
+
+        playParticles(135);
     }
     public void OnJumpUp()
     {
@@ -128,6 +133,16 @@ public class PlayerMovementScript : MonoBehaviour
 
         rb.AddForce(jumpForce * jumpUpForce, ForceMode2D.Impulse);
         usedUpJump = true;
+
+        playParticles(90);
+    }
+
+    void playParticles(int angle)
+    {
+        jumpParticles.transform.position = transform.position;
+        var shape = jumpParticles.shape;
+        shape.rotation = new Vector3(0, angle, 0);
+        jumpParticles.Play();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -150,5 +165,4 @@ public class PlayerMovementScript : MonoBehaviour
     {
         isGrounded = false;
     }
-
 }
