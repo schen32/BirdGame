@@ -82,7 +82,6 @@ public class PlayerMovementScript : MonoBehaviour
             rb.linearVelocityY = jumpForce;
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
-            isGrounded = false;
         }
         animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocityX));
         animator.SetFloat("yVelocity", Mathf.Abs(rb.linearVelocityY));
@@ -113,7 +112,6 @@ public class PlayerMovementScript : MonoBehaviour
         if (usedLeftJump) return;
 
         rb.AddForce(jumpForce * jumpLeftForce, ForceMode2D.Impulse);
-        isGrounded = false;
         usedLeftJump = true;
     }
 
@@ -122,7 +120,6 @@ public class PlayerMovementScript : MonoBehaviour
         if (usedRightJump) return;
 
         rb.AddForce(jumpForce * jumpRightForce, ForceMode2D.Impulse);
-        isGrounded = false;
         usedRightJump = true;
     }
     public void OnJumpUp()
@@ -130,7 +127,6 @@ public class PlayerMovementScript : MonoBehaviour
         if (usedUpJump) return;
 
         rb.AddForce(jumpForce * jumpUpForce, ForceMode2D.Impulse);
-        isGrounded = false;
         usedUpJump = true;
     }
 
