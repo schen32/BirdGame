@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerMovementScript : MonoBehaviour
 {
@@ -30,6 +31,10 @@ public class PlayerMovementScript : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
     SpriteRenderer spriteRenderer;
+    AudioSource audioSource;
+
+    public AudioClip jumpSound;
+    public AudioClip landSound;
     
     void Awake()
     {
@@ -48,6 +53,7 @@ public class PlayerMovementScript : MonoBehaviour
 
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void FixedUpdate()
@@ -117,6 +123,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedLeftJump = true;
 
         playParticles(45);
+        playAudio(jumpSound, 0.2f);
     }
 
     public void OnJumpRight()
@@ -127,6 +134,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedRightJump = true;
 
         playParticles(135);
+        playAudio(jumpSound, 0.2f);
     }
     public void OnJumpUp()
     {
@@ -136,6 +144,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedUpJump = true;
 
         playParticles(90);
+        playAudio(jumpSound, 0.2f);
     }
 
     void playParticles(int angle, float lifetime = 0.4f, int emitCount = 30)
@@ -152,6 +161,14 @@ public class PlayerMovementScript : MonoBehaviour
         jumpParticles.Play();
     }
 
+    void playAudio(AudioClip sound, float volume)
+    {
+        audioSource.clip = sound;
+        audioSource.volume = volume;
+        audioSource.pitch = Random.Range(0.8f, 1.2f);
+        audioSource.Play();
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         foreach (ContactPoint2D contact in collision.contacts)
@@ -166,6 +183,7 @@ public class PlayerMovementScript : MonoBehaviour
                 usedRightJump = false;
 
                 playParticles(90, 0.2f, 5);
+                playAudio(landSound, 0.1f);
             }
         }
     }
