@@ -436,6 +436,17 @@
                 },
                 {
                     "name": "",
+                    "id": "74c2f9cd-cf06-414e-a8c3-8879737d9683",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "1534dc16-a6aa-499d-9c3a-22b47347b52a",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -547,7 +558,7 @@
                 {
                     "name": "",
                     "id": "ce9b380f-dd2e-4ac9-b73e-b77e26037021",
-                    "path": "<Keyboard>/w",
+                    "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
