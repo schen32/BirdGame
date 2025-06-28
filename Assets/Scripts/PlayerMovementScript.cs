@@ -10,9 +10,9 @@ public class PlayerMovementScript : MonoBehaviour
     public float gravityScale;
     public float fallingGravityScale;
 
-    public Vector2 jumpLeftForce;
-    public Vector2 jumpRightForce;
-    public Vector2 jumpUpForce;
+    Vector2 boostLeftForce;
+    Vector2 boostRightForce;
+    Vector2 boostUpForce;
 
     public ParticleSystem jumpParticles;
 
@@ -22,10 +22,12 @@ public class PlayerMovementScript : MonoBehaviour
     float coyoteTime = 0.1f; // Optional: allows jump shortly after falling
     float coyoteTimeCounter = 0f;
     bool isGrounded = false;
+    bool isTouchingLeftWall = false;
+    bool isTouchingRightWall = false;
 
-    bool usedLeftJump = false;
-    bool usedUpJump = false;
-    bool usedRightJump = false;
+    bool usedLeftBoost = false;
+    bool usedUpBoost = false;
+    bool usedRightBoost = false;
 
     Vector2 moveInput;
     Rigidbody2D rb;
@@ -35,7 +37,6 @@ public class PlayerMovementScript : MonoBehaviour
 
     public AudioClip boostSound;
     public AudioClip landSound;
-    public AudioClip jumpSound;
     
     void Awake()
     {
@@ -45,9 +46,9 @@ public class PlayerMovementScript : MonoBehaviour
         gravityScale = 5f;
         fallingGravityScale = 10f;
 
-        jumpLeftForce = new Vector2(-1.5f, 1.5f);
-        jumpRightForce = new Vector2(1.5f, 1.5f);
-        jumpUpForce = new Vector2(0, 2);
+        boostLeftForce = new Vector2(-1.5f, 1.5f);
+        boostRightForce = new Vector2(1.5f, 1.5f);
+        boostUpForce = new Vector2(0, 2);
 
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
@@ -91,8 +92,6 @@ public class PlayerMovementScript : MonoBehaviour
             rb.linearVelocityY = jumpForce;
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
-
-            playAudio(jumpSound, 0.2f);
         }
         animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocityX));
         animator.SetFloat("yVelocity", Mathf.Abs(rb.linearVelocityY));
@@ -115,42 +114,50 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        // Only trigger on key down, not hold
+        if (isTouchingLeftWall)
+        {
+            rb.AddForce(jumpForce * boostRightForce, ForceMode2D.Impulse);
+        }
+        else if (isTouchingRightWall)
+        {
+            rb.AddForce(jumpForce * boostLeftForce, ForceMode2D.Impulse);
+        }
         jumpBufferCounter = jumpBufferTime;
     }
-    public void OnJumpLeft()
-    {
-        if (usedLeftJump) return;
 
-        rb.AddForce(jumpForce * jumpLeftForce, ForceMode2D.Impulse);
-        usedLeftJump = true;
+    public void OnBoostLeft()
+    {
+        if (usedLeftBoost) return;
+
+        rb.AddForce(jumpForce * boostLeftForce, ForceMode2D.Impulse);
+        usedLeftBoost = true;
 
         playParticles(45);
         playAudio(boostSound, 0.2f);
     }
 
-    public void OnJumpRight()
+    public void OnBoostRight()
     {
-        if (usedRightJump) return;
+        if (usedRightBoost) return;
 
-        rb.AddForce(jumpForce * jumpRightForce, ForceMode2D.Impulse);
-        usedRightJump = true;
+        rb.AddForce(jumpForce * boostRightForce, ForceMode2D.Impulse);
+        usedRightBoost = true;
 
         playParticles(135);
         playAudio(boostSound, 0.2f);
     }
-    public void OnJumpUp()
+    public void OnBoostUp()
     {
-        if (usedUpJump) return;
+        if (usedUpBoost) return;
 
-        rb.AddForce(jumpForce * jumpUpForce, ForceMode2D.Impulse);
-        usedUpJump = true;
+        rb.AddForce(jumpForce * boostUpForce, ForceMode2D.Impulse);
+        usedUpBoost = true;
 
         playParticles(90);
         playAudio(boostSound, 0.2f);
     }
 
-    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 6)
+    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 4)
     {
         var emission = jumpParticles.emission;
         emission.SetBurst(0, new ParticleSystem.Burst(0f, emitCount));
@@ -176,23 +183,34 @@ public class PlayerMovementScript : MonoBehaviour
     {
         foreach (ContactPoint2D contact in collision.contacts)
         {
+            if (contact.normal.x > 0.5f)
+            {
+                isTouchingLeftWall = true;
+            }
+            else if (contact.normal.x < -0.5f)
+            {
+                isTouchingRightWall = true;
+            }
+
             if (contact.normal.y > 0.5f)
             {
                 isGrounded = true;
                 coyoteTimeCounter = coyoteTime;
 
-                usedLeftJump = false;
-                usedUpJump = false;
-                usedRightJump = false;
+                usedLeftBoost = false;
+                usedUpBoost = false;
+                usedRightBoost = false;
 
-                playParticles(90, 0.2f, 3);
+                playParticles(90, 0.2f, 2);
                 playAudio(landSound, 0.1f);
             }
         }
     }
 
     void OnCollisionExit2D(Collision2D collision)
-    {
+    {    
         isGrounded = false;
+        isTouchingLeftWall = false;
+        isTouchingRightWall = false;
     }
 }

@@ -4423,6 +4423,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3183269493097198255, guid: 80ef14ab6c5a8024da2457309b8c0df4, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3183269493097198255, guid: 80ef14ab6c5a8024da2457309b8c0df4, type: 3}
       propertyPath: UVModule.mode
       value: 1
       objectReference: {fileID: 0}

@@ -87,7 +87,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "JumpLeft",
+                    "name": "BoostLeft",
                     "type": "Button",
                     "id": "d7932d80-581e-4bdc-af35-2e82066e36a1",
                     "expectedControlType": "",
@@ -96,7 +96,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "JumpRight",
+                    "name": "BoostRight",
                     "type": "Button",
                     "id": "bbf26291-5682-4b89-aa93-9bc2d76a8ef6",
                     "expectedControlType": "",
@@ -105,7 +105,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "JumpUp",
+                    "name": "BoostUp",
                     "type": "Button",
                     "id": "729a32a1-c0fb-4263-8915-a9fedc9765c6",
                     "expectedControlType": "",
@@ -518,7 +518,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "JumpLeft",
+                    "action": "BoostLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -529,7 +529,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "JumpLeft",
+                    "action": "BoostLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -540,7 +540,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "JumpRight",
+                    "action": "BoostRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -551,7 +551,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "JumpRight",
+                    "action": "BoostRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -562,7 +562,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "JumpUp",
+                    "action": "BoostUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -573,7 +573,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "JumpUp",
+                    "action": "BoostUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
