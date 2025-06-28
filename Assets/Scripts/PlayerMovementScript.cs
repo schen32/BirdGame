@@ -6,6 +6,8 @@ public class PlayerMovementScript : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpForce;
+    public float boostForce;
+    public float wallJumpForce;
 
     public float gravityScale;
     public float fallingGravityScale;
@@ -42,6 +44,8 @@ public class PlayerMovementScript : MonoBehaviour
     {
         moveSpeed = 10f;
         jumpForce = 20f;
+        boostForce = 20f;
+        wallJumpForce = 16f;
 
         gravityScale = 5f;
         fallingGravityScale = 10f;
@@ -92,6 +96,9 @@ public class PlayerMovementScript : MonoBehaviour
             rb.linearVelocityY = jumpForce;
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
+
+            playParticles(90, 0.2f, 2);
+            playAudio(landSound, 0.05f);
         }
         animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocityX));
         animator.SetFloat("yVelocity", Mathf.Abs(rb.linearVelocityY));
@@ -116,11 +123,15 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if (isTouchingLeftWall)
         {
-            rb.AddForce(jumpForce * boostRightForce, ForceMode2D.Impulse);
+            rb.AddForce(wallJumpForce * boostRightForce, ForceMode2D.Impulse);
+            playParticles(120, 0.2f, 2);
+            playAudio(landSound, 0.05f);
         }
         else if (isTouchingRightWall)
         {
-            rb.AddForce(jumpForce * boostLeftForce, ForceMode2D.Impulse);
+            rb.AddForce(wallJumpForce * boostLeftForce, ForceMode2D.Impulse);
+            playParticles(60, 0.2f, 2);
+            playAudio(landSound, 0.05f);
         }
         jumpBufferCounter = jumpBufferTime;
     }
@@ -129,32 +140,32 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if (usedLeftBoost) return;
 
-        rb.AddForce(jumpForce * boostLeftForce, ForceMode2D.Impulse);
+        rb.AddForce(boostForce * boostLeftForce, ForceMode2D.Impulse);
         usedLeftBoost = true;
 
         playParticles(45);
-        playAudio(boostSound, 0.2f);
+        playAudio(boostSound, 0.1f);
     }
 
     public void OnBoostRight()
     {
         if (usedRightBoost) return;
 
-        rb.AddForce(jumpForce * boostRightForce, ForceMode2D.Impulse);
+        rb.AddForce(boostForce * boostRightForce, ForceMode2D.Impulse);
         usedRightBoost = true;
 
         playParticles(135);
-        playAudio(boostSound, 0.2f);
+        playAudio(boostSound, 0.1f);
     }
     public void OnBoostUp()
     {
         if (usedUpBoost) return;
 
-        rb.AddForce(jumpForce * boostUpForce, ForceMode2D.Impulse);
+        rb.AddForce(boostForce * boostUpForce, ForceMode2D.Impulse);
         usedUpBoost = true;
 
         playParticles(90);
-        playAudio(boostSound, 0.2f);
+        playAudio(boostSound, 0.1f);
     }
 
     void playParticles(int angle, float lifetime = 0.4f, int emitCount = 4)
@@ -200,9 +211,6 @@ public class PlayerMovementScript : MonoBehaviour
                 usedLeftBoost = false;
                 usedUpBoost = false;
                 usedRightBoost = false;
-
-                playParticles(90, 0.2f, 2);
-                playAudio(landSound, 0.1f);
             }
         }
     }
