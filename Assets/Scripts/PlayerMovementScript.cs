@@ -13,6 +13,8 @@ public class PlayerMovementScript : MonoBehaviour
     public Vector2 jumpRightForce;
     public Vector2 jumpUpForce;
 
+    public ParticleSystem jumpParticles;
+
     float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
 
@@ -28,9 +30,8 @@ public class PlayerMovementScript : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
     SpriteRenderer spriteRenderer;
-    public ParticleSystem jumpParticles;
-
-    void Start()
+    
+    void Awake()
     {
         moveSpeed = 10f;
         jumpForce = 20f;
@@ -137,9 +138,15 @@ public class PlayerMovementScript : MonoBehaviour
         playParticles(90);
     }
 
-    void playParticles(int angle)
+    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 30)
     {
-        jumpParticles.transform.position = transform.position;
+        var emission = jumpParticles.emission;
+        emission.SetBurst(0, new ParticleSystem.Burst(0f, emitCount));
+
+        var main = jumpParticles.main;
+        main.startLifetime = lifetime;
+
+        jumpParticles.transform.position = rb.position;
         var shape = jumpParticles.shape;
         shape.rotation = new Vector3(0, angle, 0);
         jumpParticles.Play();
@@ -157,6 +164,8 @@ public class PlayerMovementScript : MonoBehaviour
                 usedLeftJump = false;
                 usedUpJump = false;
                 usedRightJump = false;
+
+                playParticles(90, 0.2f, 5);
             }
         }
     }
