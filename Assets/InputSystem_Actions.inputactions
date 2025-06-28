@@ -63,7 +63,7 @@
                     "name": "Previous",
                     "type": "Button",
                     "id": "2776c80d-3c14-4091-8c56-d04ced07a2b0",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -99,6 +99,15 @@
                     "name": "JumpRight",
                     "type": "Button",
                     "id": "bbf26291-5682-4b89-aa93-9bc2d76a8ef6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "JumpUp",
+                    "type": "Button",
+                    "id": "729a32a1-c0fb-4263-8915-a9fedc9765c6",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -427,17 +436,6 @@
                 },
                 {
                     "name": "",
-                    "id": "fb8b17db-09d6-4ce4-aae4-965806991c4e",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "1534dc16-a6aa-499d-9c3a-22b47347b52a",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -543,6 +541,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "JumpRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ce9b380f-dd2e-4ac9-b73e-b77e26037021",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "JumpUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a37f28e-e317-4df5-b61a-c24c4f2db611",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "JumpUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

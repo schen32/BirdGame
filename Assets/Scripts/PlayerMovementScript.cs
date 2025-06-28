@@ -5,13 +5,13 @@ public class PlayerMovementScript : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpForce;
-    public float attackForce;
 
     public float gravityScale;
     public float fallingGravityScale;
 
     public Vector2 jumpLeftForce;
     public Vector2 jumpRightForce;
+    public Vector2 jumpUpForce;
 
     float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
@@ -19,6 +19,10 @@ public class PlayerMovementScript : MonoBehaviour
     float coyoteTime = 0.1f; // Optional: allows jump shortly after falling
     float coyoteTimeCounter = 0f;
     bool isGrounded = false;
+
+    bool usedLeftJump = false;
+    bool usedUpJump = false;
+    bool usedRightJump = false;
 
     Vector2 moveInput;
     Rigidbody2D rb;
@@ -28,14 +32,14 @@ public class PlayerMovementScript : MonoBehaviour
     void Start()
     {
         moveSpeed = 10f;
-        jumpForce = 25f;
-        attackForce = 45f;
+        jumpForce = 20f;
 
-        gravityScale = 8f;
-        fallingGravityScale = 16f;
+        gravityScale = 5f;
+        fallingGravityScale = 10f;
 
-        jumpLeftForce = new Vector2(-2, 2);
-        jumpRightForce = new Vector2(2, 2);
+        jumpLeftForce = new Vector2(-1.5f, 1.5f);
+        jumpRightForce = new Vector2(1.5f, 1.5f);
+        jumpUpForce = new Vector2(0, 2);
 
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
@@ -71,12 +75,6 @@ public class PlayerMovementScript : MonoBehaviour
             rb.linearVelocityX = -moveSpeed;
             spriteRenderer.flipX = true;
         }
-        /*else
-        {
-            rb.linearVelocityX *= 0.9f;
-            if (Mathf.Abs(rb.linearVelocityX) < 0.05f)
-                rb.linearVelocityX = 0;
-        }*/
 
         // Jump (only once per press)
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
@@ -112,24 +110,28 @@ public class PlayerMovementScript : MonoBehaviour
     }
     public void OnJumpLeft()
     {
+        if (usedLeftJump) return;
+
         rb.AddForce(jumpForce * jumpLeftForce, ForceMode2D.Impulse);
         isGrounded = false;
+        usedLeftJump = true;
     }
 
     public void OnJumpRight()
     {
+        if (usedRightJump) return;
+
         rb.AddForce(jumpForce * jumpRightForce, ForceMode2D.Impulse);
         isGrounded = false;
+        usedRightJump = true;
     }
-
-    public void OnAttack(InputValue value)
+    public void OnJumpUp()
     {
-        Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
-        Vector2 mouseWorldPos = (Vector2)Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        if (usedUpJump) return;
 
-        Vector2 attackDir = (mouseWorldPos - rb.position).normalized;
-
-        rb.AddForce(attackDir * attackForce, ForceMode2D.Impulse);
+        rb.AddForce(jumpForce * jumpUpForce, ForceMode2D.Impulse);
+        isGrounded = false;
+        usedUpJump = true;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -140,6 +142,10 @@ public class PlayerMovementScript : MonoBehaviour
             {
                 isGrounded = true;
                 coyoteTimeCounter = coyoteTime;
+
+                usedLeftJump = false;
+                usedUpJump = false;
+                usedRightJump = false;
             }
         }
     }
