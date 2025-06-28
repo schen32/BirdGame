@@ -30,7 +30,7 @@ public class PlayerMovementScript : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D rb;
     Animator animator;
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer sr;
     AudioSource audioSource;
 
     public AudioClip boostSound;
@@ -53,7 +53,7 @@ public class PlayerMovementScript : MonoBehaviour
         rb.gravityScale = gravityScale;
 
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -77,12 +77,12 @@ public class PlayerMovementScript : MonoBehaviour
         if (moveInput.x > 0)
         {
             rb.linearVelocityX = moveSpeed;
-            spriteRenderer.flipX = false;
+            sr.flipX = false;
         }
         else if (moveInput.x < 0)
         {
             rb.linearVelocityX = -moveSpeed;
-            spriteRenderer.flipX = true;
+            sr.flipX = true;
         }
 
         // Jump (only once per press)
@@ -150,7 +150,7 @@ public class PlayerMovementScript : MonoBehaviour
         playAudio(boostSound, 0.2f);
     }
 
-    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 20)
+    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 6)
     {
         var emission = jumpParticles.emission;
         emission.SetBurst(0, new ParticleSystem.Burst(0f, emitCount));
@@ -158,7 +158,7 @@ public class PlayerMovementScript : MonoBehaviour
         var main = jumpParticles.main;
         main.startLifetime = lifetime;
 
-        jumpParticles.transform.position = rb.position;
+        jumpParticles.transform.position = rb.position - new Vector2(0, sr.size.y);
         var shape = jumpParticles.shape;
         shape.rotation = new Vector3(0, angle, 0);
         jumpParticles.Play();
@@ -176,7 +176,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            if (contact.normal.y > 0.7f)
+            if (contact.normal.y > 0.5f)
             {
                 isGrounded = true;
                 coyoteTimeCounter = coyoteTime;
@@ -185,7 +185,7 @@ public class PlayerMovementScript : MonoBehaviour
                 usedUpJump = false;
                 usedRightJump = false;
 
-                playParticles(90, 0.2f, 5);
+                playParticles(90, 0.2f, 3);
                 playAudio(landSound, 0.1f);
             }
         }
