@@ -3,10 +3,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementScript : MonoBehaviour
 {
-    public float moveSpeed = 10f;
-    public float jumpForce = 25f;
-    public float gravityScale = 8f;
-    public float fallingGravityScale = 12f;
+    public float moveSpeed;
+    public float jumpForce;
+    public float attackForce;
+
+    public float gravityScale;
+    public float fallingGravityScale;
 
     float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
@@ -22,8 +24,16 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Start()
     {
+        moveSpeed = 10f;
+        jumpForce = 25f;
+        attackForce = 45f;
+
+        gravityScale = 8f;
+        fallingGravityScale = 16f;
+
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
+
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -45,18 +55,22 @@ public class PlayerMovementScript : MonoBehaviour
         }
 
         // Horizontal movement
-        float xVelocity = 0;
         if (moveInput.x > 0)
         {
-            xVelocity = moveSpeed;
+            rb.linearVelocityX = moveSpeed;
             spriteRenderer.flipX = false;
         }
         else if (moveInput.x < 0)
         {
-            xVelocity = -moveSpeed;
+            rb.linearVelocityX = -moveSpeed;
             spriteRenderer.flipX = true;
         }
-        rb.linearVelocityX = xVelocity;
+        /*else
+        {
+            rb.linearVelocityX *= 0.9f;
+            if (Mathf.Abs(rb.linearVelocityX) < 0.05f)
+                rb.linearVelocityX = 0;
+        }*/
 
         // Jump (only once per press)
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
@@ -88,10 +102,18 @@ public class PlayerMovementScript : MonoBehaviour
     public void OnJump(InputValue value)
     {
         // Only trigger on key down, not hold
-        if (value.isPressed)
-        {
-            jumpBufferCounter = jumpBufferTime;
-        }
+        jumpBufferCounter = jumpBufferTime;
+        
+    }
+
+    public void OnAttack(InputValue value)
+    {
+        Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
+        Vector2 mouseWorldPos = (Vector2)Camera.main.ScreenToWorldPoint(mouseScreenPos);
+
+        Vector2 attackDir = (mouseWorldPos - rb.position).normalized;
+
+        rb.AddForce(attackDir * attackForce, ForceMode2D.Impulse);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
