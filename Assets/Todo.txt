@@ -3,3 +3,4 @@ Todo:
 wall jump
 wall jump animation
 wall hang animation
+different character sprite

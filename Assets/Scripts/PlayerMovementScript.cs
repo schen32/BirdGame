@@ -33,8 +33,9 @@ public class PlayerMovementScript : MonoBehaviour
     SpriteRenderer spriteRenderer;
     AudioSource audioSource;
 
-    public AudioClip jumpSound;
+    public AudioClip boostSound;
     public AudioClip landSound;
+    public AudioClip jumpSound;
     
     void Awake()
     {
@@ -90,6 +91,8 @@ public class PlayerMovementScript : MonoBehaviour
             rb.linearVelocityY = jumpForce;
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
+
+            playAudio(jumpSound, 0.2f);
         }
         animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocityX));
         animator.SetFloat("yVelocity", Mathf.Abs(rb.linearVelocityY));
@@ -123,7 +126,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedLeftJump = true;
 
         playParticles(45);
-        playAudio(jumpSound, 0.2f);
+        playAudio(boostSound, 0.2f);
     }
 
     public void OnJumpRight()
@@ -134,7 +137,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedRightJump = true;
 
         playParticles(135);
-        playAudio(jumpSound, 0.2f);
+        playAudio(boostSound, 0.2f);
     }
     public void OnJumpUp()
     {
@@ -144,10 +147,10 @@ public class PlayerMovementScript : MonoBehaviour
         usedUpJump = true;
 
         playParticles(90);
-        playAudio(jumpSound, 0.2f);
+        playAudio(boostSound, 0.2f);
     }
 
-    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 30)
+    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 20)
     {
         var emission = jumpParticles.emission;
         emission.SetBurst(0, new ParticleSystem.Burst(0f, emitCount));
