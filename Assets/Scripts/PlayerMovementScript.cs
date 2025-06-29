@@ -12,9 +12,9 @@ public class PlayerMovementScript : MonoBehaviour
     public float gravityScale;
     public float fallingGravityScale;
 
-    Vector2 boostLeftDirection;
-    Vector2 boostRightDirection;
-    Vector2 boostUpDirection;
+    Vector2 boostLeftDirection = new Vector2(-1.5f, 1.5f);
+    Vector2 boostRightDirection = new Vector2(1.5f, 1.5f);
+    Vector2 boostUpDirection = new Vector2(0, 2);
 
     public ParticleSystem jumpParticles;
     public AudioClip boostSound;
@@ -48,10 +48,6 @@ public class PlayerMovementScript : MonoBehaviour
 
         gravityScale = 5f;
         fallingGravityScale = 10f;
-
-        boostLeftDirection = new Vector2(-1.5f, 1.5f);
-        boostRightDirection = new Vector2(1.5f, 1.5f);
-        boostUpDirection = new Vector2(0, 2);
 
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
@@ -107,10 +103,9 @@ public class PlayerMovementScript : MonoBehaviour
 
                 moveInput.x = 0;
             }
-            else if (isGrounded)
+            else
             {
                 rb.linearVelocityY = jumpForce;
-
                 playParticles(90, 0.2f, 2);
             }
             playAudio(jumpSound, 0.05f);
