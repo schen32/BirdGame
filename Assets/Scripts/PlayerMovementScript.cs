@@ -12,17 +12,19 @@ public class PlayerMovementScript : MonoBehaviour
     public float gravityScale;
     public float fallingGravityScale;
 
-    Vector2 boostLeftForce;
-    Vector2 boostRightForce;
-    Vector2 boostUpForce;
+    Vector2 boostLeftDirection;
+    Vector2 boostRightDirection;
+    Vector2 boostUpDirection;
 
     public ParticleSystem jumpParticles;
+    public AudioClip boostSound;
+    public AudioClip landSound;
 
     float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
-
     float coyoteTime = 0.1f; // Optional: allows jump shortly after falling
     float coyoteTimeCounter = 0f;
+
     bool isGrounded = false;
     bool isTouchingLeftWall = false;
     bool isTouchingRightWall = false;
@@ -36,9 +38,6 @@ public class PlayerMovementScript : MonoBehaviour
     Animator animator;
     SpriteRenderer sr;
     AudioSource audioSource;
-
-    public AudioClip boostSound;
-    public AudioClip landSound;
     
     void Awake()
     {
@@ -50,9 +49,9 @@ public class PlayerMovementScript : MonoBehaviour
         gravityScale = 5f;
         fallingGravityScale = 10f;
 
-        boostLeftForce = new Vector2(-1.5f, 1.5f);
-        boostRightForce = new Vector2(1.5f, 1.5f);
-        boostUpForce = new Vector2(0, 2);
+        boostLeftDirection = new Vector2(-1.5f, 1.5f);
+        boostRightDirection = new Vector2(1.5f, 1.5f);
+        boostUpDirection = new Vector2(0, 2);
 
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
@@ -123,13 +122,13 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if (isTouchingLeftWall)
         {
-            rb.AddForce(wallJumpForce * boostRightForce, ForceMode2D.Impulse);
+            rb.AddForce(wallJumpForce * boostRightDirection, ForceMode2D.Impulse);
             playParticles(120, 0.2f, 2);
             playAudio(landSound, 0.05f);
         }
         else if (isTouchingRightWall)
         {
-            rb.AddForce(wallJumpForce * boostLeftForce, ForceMode2D.Impulse);
+            rb.AddForce(wallJumpForce * boostLeftDirection, ForceMode2D.Impulse);
             playParticles(60, 0.2f, 2);
             playAudio(landSound, 0.05f);
         }
@@ -140,7 +139,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if (usedLeftBoost) return;
 
-        rb.AddForce(boostForce * boostLeftForce, ForceMode2D.Impulse);
+        rb.AddForce(boostForce * boostLeftDirection, ForceMode2D.Impulse);
         usedLeftBoost = true;
 
         playParticles(45);
@@ -151,7 +150,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if (usedRightBoost) return;
 
-        rb.AddForce(boostForce * boostRightForce, ForceMode2D.Impulse);
+        rb.AddForce(boostForce * boostRightDirection, ForceMode2D.Impulse);
         usedRightBoost = true;
 
         playParticles(135);
@@ -161,7 +160,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         if (usedUpBoost) return;
 
-        rb.AddForce(boostForce * boostUpForce, ForceMode2D.Impulse);
+        rb.AddForce(boostForce * boostUpDirection, ForceMode2D.Impulse);
         usedUpBoost = true;
 
         playParticles(90);

@@ -801,6 +801,22 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1338549678537902763, guid: 34c48506f39592b4bbc12b451f5bd9a6, type: 3}
+      propertyPath: m_CompositeOperation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3422248682799846044, guid: 34c48506f39592b4bbc12b451f5bd9a6, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3962533199377611058, guid: 34c48506f39592b4bbc12b451f5bd9a6, type: 3}
+      propertyPath: m_CompositeOperation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3962533199377611058, guid: 34c48506f39592b4bbc12b451f5bd9a6, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3962533199377611058, guid: 34c48506f39592b4bbc12b451f5bd9a6, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.size
       value: 14
