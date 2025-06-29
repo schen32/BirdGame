@@ -12,9 +12,9 @@ public class PlayerMovementScript : MonoBehaviour
     public float gravityScale;
     public float fallingGravityScale;
 
-    Vector2 boostLeftDirection = new Vector2(-1.5f, 1.5f);
-    Vector2 boostRightDirection = new Vector2(1.5f, 1.5f);
-    Vector2 boostUpDirection = new Vector2(0, 2);
+    Vector2 boostLeftDirection = new Vector2(-1.5f, 2f);
+    Vector2 boostRightDirection = new Vector2(1.5f, 2f);
+    Vector2 boostUpDirection = new Vector2(0, 2.5f);
 
     public ParticleSystem jumpParticles;
     public AudioClip boostSound;
@@ -88,8 +88,12 @@ public class PlayerMovementScript : MonoBehaviour
         // Jump (only once per press)
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
         {
-            
-            if (isTouchingLeftWall)
+            if (isGrounded)
+            {
+                rb.linearVelocityY = jumpForce;
+                playParticles(90, 0.2f, 2);
+            }
+            else if (isTouchingLeftWall)
             {
                 rb.AddForce(wallJumpForce * boostRightDirection, ForceMode2D.Impulse);
                 playParticles(120, 0.2f, 2);
@@ -108,7 +112,7 @@ public class PlayerMovementScript : MonoBehaviour
                 rb.linearVelocityY = jumpForce;
                 playParticles(90, 0.2f, 2);
             }
-            playAudio(jumpSound, 0.05f);
+            playAudio(jumpSound, 0.2f);
 
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
@@ -147,7 +151,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedLeftBoost = true;
 
         playParticles(45);
-        playAudio(boostSound, 0.1f);
+        playAudio(boostSound, 0.3f);
     }
 
     public void OnBoostRight()
@@ -158,7 +162,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedRightBoost = true;
 
         playParticles(135);
-        playAudio(boostSound, 0.1f);
+        playAudio(boostSound, 0.3f);
     }
     public void OnBoostUp()
     {
@@ -168,7 +172,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedUpBoost = true;
 
         playParticles(90);
-        playAudio(boostSound, 0.1f);
+        playAudio(boostSound, 0.3f);
     }
 
     void playParticles(int angle, float lifetime = 0.4f, int emitCount = 4)
@@ -196,6 +200,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         isTouchingLeftWall = false;
         isTouchingRightWall = false;
+        isGrounded = false;
 
         foreach (ContactPoint2D contact in collision.contacts)
         {
