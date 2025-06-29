@@ -92,13 +92,8 @@ public class PlayerMovementScript : MonoBehaviour
         // Jump (only once per press)
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
         {
-            if (isGrounded)
-            {
-                rb.linearVelocityY = jumpForce;
-
-                playParticles(90, 0.2f, 2);
-            }
-            else if (isTouchingLeftWall)
+            
+            if (isTouchingLeftWall)
             {
                 rb.AddForce(wallJumpForce * boostRightDirection, ForceMode2D.Impulse);
                 playParticles(120, 0.2f, 2);
@@ -111,6 +106,12 @@ public class PlayerMovementScript : MonoBehaviour
                 playParticles(60, 0.2f, 2);
 
                 moveInput.x = 0;
+            }
+            else if (isGrounded)
+            {
+                rb.linearVelocityY = jumpForce;
+
+                playParticles(90, 0.2f, 2);
             }
             playAudio(jumpSound, 0.05f);
 
@@ -212,8 +213,6 @@ public class PlayerMovementScript : MonoBehaviour
             if (contact.normal.y > 0.5f)
             {
                 isGrounded = true;
-                coyoteTimeCounter = coyoteTime;
-
                 usedLeftBoost = false;
                 usedUpBoost = false;
                 usedRightBoost = false;
