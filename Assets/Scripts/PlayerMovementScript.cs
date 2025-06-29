@@ -18,7 +18,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     public ParticleSystem jumpParticles;
     public AudioClip boostSound;
-    public AudioClip landSound;
+    public AudioClip jumpSound;
 
     float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
@@ -68,7 +68,7 @@ public class PlayerMovementScript : MonoBehaviour
         {
             jumpBufferCounter -= Time.fixedDeltaTime;
         }
-        if (isGrounded)
+        if (isGrounded || isTouchingLeftWall || isTouchingRightWall)
         {
             coyoteTimeCounter = coyoteTime;
         }
@@ -92,15 +92,35 @@ public class PlayerMovementScript : MonoBehaviour
         // Jump (only once per press)
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
         {
-            rb.linearVelocityY = jumpForce;
+            if (isGrounded)
+            {
+                rb.linearVelocityY = jumpForce;
+
+                playParticles(90, 0.2f, 2);
+            }
+            else if (isTouchingLeftWall)
+            {
+                rb.AddForce(wallJumpForce * boostRightDirection, ForceMode2D.Impulse);
+                playParticles(120, 0.2f, 2);
+                
+                moveInput.x = 0;
+            }
+            else if (isTouchingRightWall)
+            {
+                rb.AddForce(wallJumpForce * boostLeftDirection, ForceMode2D.Impulse);
+                playParticles(60, 0.2f, 2);
+
+                moveInput.x = 0;
+            }
+            playAudio(jumpSound, 0.05f);
+
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
-
-            playParticles(90, 0.2f, 2);
-            playAudio(landSound, 0.05f);
         }
         animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocityX));
         animator.SetFloat("yVelocity", Mathf.Abs(rb.linearVelocityY));
+        animator.SetBool("isTouchingWall", isTouchingLeftWall || isTouchingRightWall);
+        animator.SetBool("isGrounded", isGrounded);
 
         // Gravity adjustment
         if (rb.linearVelocityY >= 0)
@@ -120,18 +140,6 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        if (isTouchingLeftWall)
-        {
-            rb.AddForce(wallJumpForce * boostRightDirection, ForceMode2D.Impulse);
-            playParticles(120, 0.2f, 2);
-            playAudio(landSound, 0.05f);
-        }
-        else if (isTouchingRightWall)
-        {
-            rb.AddForce(wallJumpForce * boostLeftDirection, ForceMode2D.Impulse);
-            playParticles(60, 0.2f, 2);
-            playAudio(landSound, 0.05f);
-        }
         jumpBufferCounter = jumpBufferTime;
     }
 
@@ -188,19 +196,18 @@ public class PlayerMovementScript : MonoBehaviour
         audioSource.pitch = Random.Range(0.8f, 1.2f);
         audioSource.Play();
     }
-
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D collision)
     {
+        isTouchingLeftWall = false;
+        isTouchingRightWall = false;
+
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (contact.normal.x > 0.5f)
-            {
                 isTouchingLeftWall = true;
-            }
-            else if (contact.normal.x < -0.5f)
-            {
+
+            if (contact.normal.x < -0.5f)
                 isTouchingRightWall = true;
-            }
 
             if (contact.normal.y > 0.5f)
             {
