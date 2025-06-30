@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 public class GMRespawn : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class GMRespawn : MonoBehaviour
 
     private void Start()
     {
-        pTrans = GameObject.FindGameObjectWithTag("Player").transform;
+        var player = GameObject.FindGameObjectWithTag("Player");
+        pTrans = player.transform;
         RespawnPlayer();
     }
 
