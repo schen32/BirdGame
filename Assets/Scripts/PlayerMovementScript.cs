@@ -20,11 +20,16 @@ public class PlayerMovementScript : MonoBehaviour
     public ParticleSystem runParticles;
     public AudioClip boostSound;
     public AudioClip jumpSound;
+    public AudioClip landSound;
+    public AudioClip runSound;
 
     float jumpBufferTime = 0.2f;
     float jumpBufferCounter = 0f;
     float coyoteTime = 0.1f; // Optional: allows jump shortly after falling
     float coyoteTimeCounter = 0f;
+
+    public float runSoundInterval = 0.4f;
+    float runSoundTimer = 0f;
 
     bool isGrounded = false;
     bool isTouchingLeftWall = false;
@@ -38,7 +43,8 @@ public class PlayerMovementScript : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
     SpriteRenderer sr;
-    AudioSource audioSource;
+
+    public AudioSource audioSource;
     
     void Awake()
     {
@@ -55,7 +61,6 @@ public class PlayerMovementScript : MonoBehaviour
 
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
-        audioSource = GetComponent<AudioSource>();
     }
 
     void FixedUpdate()
@@ -75,16 +80,33 @@ public class PlayerMovementScript : MonoBehaviour
         }
 
         // Horizontal movement
-        if (moveInput.x > 0)
+        if (moveInput.x != 0)
         {
-            rb.linearVelocityX = moveSpeed;
-            if (isGrounded) playRunParticles(180);
+            if (moveInput.x > 0)
+            {
+                rb.linearVelocityX = moveSpeed;
+                if (isGrounded) playRunParticles(180);
+            }
+            else if (moveInput.x < 0)
+            {
+                rb.linearVelocityX = -moveSpeed;
+                if (isGrounded) playRunParticles(0);
+            }
+            if (isGrounded)
+            {
+                runSoundTimer -= Time.deltaTime;
+                if (runSoundTimer <= 0)
+                {
+                    playAudio(runSound, 0.05f);
+                    runSoundTimer = runSoundInterval;
+                }
+            }
         }
-        else if (moveInput.x < 0)
+        else
         {
-            rb.linearVelocityX = -moveSpeed;
-            if (isGrounded) playRunParticles(0);
+            runSoundTimer = 0f;
         }
+
 
         // Jump (only once per press)
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
@@ -98,7 +120,7 @@ public class PlayerMovementScript : MonoBehaviour
             {
                 rb.AddForce(wallJumpForce * boostRightDirection, ForceMode2D.Impulse);
                 playJumpParticles(120, 0.2f, 2);
-                
+
                 moveInput.x = 0;
             }
             else if (isTouchingRightWall)
@@ -113,7 +135,7 @@ public class PlayerMovementScript : MonoBehaviour
                 rb.linearVelocityY = jumpForce;
                 playJumpParticles(90, 0.2f, 2);
             }
-            playAudio(jumpSound, 0.2f);
+            playAudio(jumpSound, 0.15f);
 
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
@@ -245,6 +267,16 @@ public class PlayerMovementScript : MonoBehaviour
                 usedLeftBoost = false;
                 usedUpBoost = false;
                 usedRightBoost = false;
+            }
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y > 0.5f)
+            {
+                playAudio(landSound, 0.1f);
             }
         }
     }

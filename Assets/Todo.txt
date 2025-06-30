@@ -5,8 +5,8 @@ escape menu
 main menu
 music
 tiles
-running particles
 better room transitions
 some UI
 on screen tutorials
 boost animation
+powerups to unlock boost
