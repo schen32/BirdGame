@@ -77,12 +77,10 @@ public class PlayerMovementScript : MonoBehaviour
         if (moveInput.x > 0)
         {
             rb.linearVelocityX = moveSpeed;
-            sr.flipX = false;
         }
         else if (moveInput.x < 0)
         {
             rb.linearVelocityX = -moveSpeed;
-            sr.flipX = true;
         }
 
         // Jump (only once per press)
@@ -122,12 +120,20 @@ public class PlayerMovementScript : MonoBehaviour
         animator.SetBool("isTouchingWall", isTouchingLeftWall || isTouchingRightWall);
         animator.SetBool("isGrounded", isGrounded);
 
+        if (rb.linearVelocityX >= 0)
+        {
+            sr.flipX = false;
+        }
+        else
+        {
+            sr.flipX = true;
+        }
         // Gravity adjustment
         if (rb.linearVelocityY >= 0)
         {
             rb.gravityScale = gravityScale;
         }
-        else if (rb.linearVelocityY < 0)
+        else
         {
             rb.gravityScale = fallingGravityScale;
         }
