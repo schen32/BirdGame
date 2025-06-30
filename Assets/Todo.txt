@@ -1,6 +1,11 @@
 Todo:
 
-wall jump
-wall jump animation
-wall hang animation
-different character sprite
+restart animation
+escape menu
+main menu
+music
+tiles
+running particles
+better room transitions
+some UI
+on screen tutorials
