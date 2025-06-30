@@ -6,8 +6,6 @@ public class DeadZoneScript : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
-        // Reload the current scene
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
+        GMRespawn.Instance.RespawnPlayer();
     }
 }
