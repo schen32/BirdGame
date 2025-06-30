@@ -17,6 +17,7 @@ public class PlayerMovementScript : MonoBehaviour
     Vector2 boostUpDirection = new Vector2(0, 2.5f);
 
     public ParticleSystem jumpParticles;
+    public ParticleSystem runParticles;
     public AudioClip boostSound;
     public AudioClip jumpSound;
 
@@ -77,10 +78,12 @@ public class PlayerMovementScript : MonoBehaviour
         if (moveInput.x > 0)
         {
             rb.linearVelocityX = moveSpeed;
+            if (isGrounded) playRunParticles(180);
         }
         else if (moveInput.x < 0)
         {
             rb.linearVelocityX = -moveSpeed;
+            if (isGrounded) playRunParticles(0);
         }
 
         // Jump (only once per press)
@@ -89,26 +92,26 @@ public class PlayerMovementScript : MonoBehaviour
             if (isGrounded)
             {
                 rb.linearVelocityY = jumpForce;
-                playParticles(90, 0.2f, 2);
+                playJumpParticles(90, 0.2f, 2);
             }
             else if (isTouchingLeftWall)
             {
                 rb.AddForce(wallJumpForce * boostRightDirection, ForceMode2D.Impulse);
-                playParticles(120, 0.2f, 2);
+                playJumpParticles(120, 0.2f, 2);
                 
                 moveInput.x = 0;
             }
             else if (isTouchingRightWall)
             {
                 rb.AddForce(wallJumpForce * boostLeftDirection, ForceMode2D.Impulse);
-                playParticles(60, 0.2f, 2);
+                playJumpParticles(60, 0.2f, 2);
 
                 moveInput.x = 0;
             }
             else
             {
                 rb.linearVelocityY = jumpForce;
-                playParticles(90, 0.2f, 2);
+                playJumpParticles(90, 0.2f, 2);
             }
             playAudio(jumpSound, 0.2f);
 
@@ -156,7 +159,7 @@ public class PlayerMovementScript : MonoBehaviour
         rb.AddForce(boostForce * boostLeftDirection, ForceMode2D.Impulse);
         usedLeftBoost = true;
 
-        playParticles(45);
+        playJumpParticles(45);
         playAudio(boostSound, 0.3f);
     }
 
@@ -167,7 +170,7 @@ public class PlayerMovementScript : MonoBehaviour
         rb.AddForce(boostForce * boostRightDirection, ForceMode2D.Impulse);
         usedRightBoost = true;
 
-        playParticles(135);
+        playJumpParticles(135);
         playAudio(boostSound, 0.3f);
     }
     public void OnBoostUp()
@@ -177,11 +180,11 @@ public class PlayerMovementScript : MonoBehaviour
         rb.AddForce(boostForce * boostUpDirection, ForceMode2D.Impulse);
         usedUpBoost = true;
 
-        playParticles(90);
+        playJumpParticles(90);
         playAudio(boostSound, 0.3f);
     }
 
-    void playParticles(int angle, float lifetime = 0.4f, int emitCount = 4)
+    void playJumpParticles(int angle, float lifetime = 0.4f, int emitCount = 4)
     {
         var emission = jumpParticles.emission;
         emission.SetBurst(0, new ParticleSystem.Burst(0f, emitCount));
@@ -193,6 +196,26 @@ public class PlayerMovementScript : MonoBehaviour
         var shape = jumpParticles.shape;
         shape.rotation = new Vector3(0, angle, 0);
         jumpParticles.Play();
+    }
+    void playRunParticles(int angle)
+    {
+        if (!runParticles.isPlaying)
+        {
+            runParticles.transform.position = rb.position - new Vector2(0, sr.size.y) / 2;
+            var shape = runParticles.shape;
+            shape.rotation = new Vector3(0, angle, 0);
+
+            var renderer = runParticles.GetComponent<ParticleSystemRenderer>();
+            if (angle < 90)
+            {
+                renderer.flip = new Vector2(1, 0);
+            }
+            else
+            {
+                renderer.flip = new Vector2(0, 0);
+            }
+            runParticles.Play();
+        }
     }
 
     void playAudio(AudioClip sound, float volume)
