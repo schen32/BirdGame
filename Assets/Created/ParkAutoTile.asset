@@ -17,7 +17,7 @@ MonoBehaviour:
   m_DefaultColliderType: 1
   m_MaskType: 1
   m_AutoTileDictionary:
-    keyData: ff010000b0010000d8000000f8010000360000003f0000001b00000090000000b6010000db000000b801000010000000fe010000fb010000ff000000bf010000
+    keyData: ff010000b0010000d8000000f8010000360000003f0000001b00000090000000b6010000db000000b801000010000000fe010000fb010000ff000000bf010000300000001800000038000000
     valueData:
     - spriteList:
       - {fileID: 9037964221047779625, guid: 830223d9a9e20854084a94c3fd5ea205, type: 3}
@@ -85,6 +85,18 @@ MonoBehaviour:
       - {fileID: -2930693892644937385, guid: 6c9caa53a926ba241a795fb83437cb70, type: 3}
       textureList:
       - {fileID: 2800000, guid: 6c9caa53a926ba241a795fb83437cb70, type: 3}
+    - spriteList:
+      - {fileID: 3352217908018583713, guid: 962948996f702df4f8452f3cacf972bf, type: 3}
+      textureList:
+      - {fileID: 2800000, guid: 962948996f702df4f8452f3cacf972bf, type: 3}
+    - spriteList:
+      - {fileID: 41439707634215638, guid: b492509854680ad4fac3b6db4a8b5a99, type: 3}
+      textureList:
+      - {fileID: 2800000, guid: b492509854680ad4fac3b6db4a8b5a99, type: 3}
+    - spriteList:
+      - {fileID: 2377713048454579900, guid: 40d7af9f53fdb5e4cbf5e4c865f0bfea, type: 3}
+      textureList:
+      - {fileID: 2800000, guid: 40d7af9f53fdb5e4cbf5e4c865f0bfea, type: 3}
   m_TextureList:
   - {fileID: 2800000, guid: 505d172991bf15b48bf04a6d2fba201d, type: 3}
   - {fileID: 2800000, guid: d49841e75c2e399428c77adc3bffbccd, type: 3}
@@ -103,8 +115,12 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 6c9caa53a926ba241a795fb83437cb70, type: 3}
   - {fileID: 2800000, guid: 68e28617b2ee8f04b9d3390d12a726fb, type: 3}
   - {fileID: 2800000, guid: 4967c8925bef1da4d842b18248baae4a, type: 3}
-  - {fileID: 0}
+  - {fileID: 2800000, guid: 40d7af9f53fdb5e4cbf5e4c865f0bfea, type: 3}
+  - {fileID: 2800000, guid: 962948996f702df4f8452f3cacf972bf, type: 3}
+  - {fileID: 2800000, guid: b492509854680ad4fac3b6db4a8b5a99, type: 3}
   m_TextureScaleList:
+  - 1
+  - 1
   - 1
   - 1
   - 1
