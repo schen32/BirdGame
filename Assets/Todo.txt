@@ -4,7 +4,7 @@ escape menu
 main menu
 music
 tiles
-some UI
-on screen tutorials
+mini-map
+parallax background
 boost animation
 powerups to unlock boost
