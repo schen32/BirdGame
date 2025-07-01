@@ -4,7 +4,6 @@ escape menu
 main menu
 music
 tiles
-better room transitions
 some UI
 on screen tutorials
 boost animation
