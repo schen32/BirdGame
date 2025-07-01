@@ -97,7 +97,7 @@ public class PlayerMovementScript : MonoBehaviour
                 runSoundTimer -= Time.deltaTime;
                 if (runSoundTimer <= 0)
                 {
-                    playAudio(runSound, 0.05f);
+                    playAudio(runSound, 0.1f);
                     runSoundTimer = runSoundInterval;
                 }
             }
@@ -135,7 +135,7 @@ public class PlayerMovementScript : MonoBehaviour
                 rb.linearVelocityY = jumpForce;
                 playJumpParticles(90, 0.2f, 2);
             }
-            playAudio(jumpSound, 0.15f);
+            playAudio(jumpSound, 0.30f);
 
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
@@ -182,7 +182,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedLeftBoost = true;
 
         playJumpParticles(45);
-        playAudio(boostSound, 0.3f);
+        playAudio(boostSound, 0.6f);
     }
 
     public void OnBoostRight()
@@ -193,7 +193,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedRightBoost = true;
 
         playJumpParticles(135);
-        playAudio(boostSound, 0.3f);
+        playAudio(boostSound, 0.6f);
     }
     public void OnBoostUp()
     {
@@ -203,7 +203,7 @@ public class PlayerMovementScript : MonoBehaviour
         usedUpBoost = true;
 
         playJumpParticles(90);
-        playAudio(boostSound, 0.3f);
+        playAudio(boostSound, 0.6f);
     }
 
     void playJumpParticles(int angle, float lifetime = 0.4f, int emitCount = 4)
@@ -276,7 +276,7 @@ public class PlayerMovementScript : MonoBehaviour
         {
             if (contact.normal.y > 0.5f)
             {
-                playAudio(landSound, 0.1f);
+                playAudio(landSound, 0.2f);
             }
         }
     }
