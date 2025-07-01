@@ -3,8 +3,5 @@ Todo:
 escape menu
 main menu
 music
-tiles
-mini-map
-parallax background
 boost animation
 powerups to unlock boost
