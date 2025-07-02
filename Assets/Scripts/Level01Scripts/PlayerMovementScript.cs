@@ -16,6 +16,10 @@ public class PlayerMovementScript : MonoBehaviour
     Vector2 boostRightDirection = new Vector2(1.5f, 2f);
     Vector2 boostUpDirection = new Vector2(0, 2.5f);
 
+    public bool canBoostLeft = false;
+    public bool canBoostUp = false;
+    public bool canBoostRight = false;
+
     public ParticleSystem jumpParticles;
     public ParticleSystem runParticles;
     public AudioClip boostSound;
@@ -176,7 +180,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void OnBoostLeft()
     {
-        if (usedLeftBoost) return;
+        if (usedLeftBoost || !canBoostLeft) return;
 
         rb.AddForce(boostForce * boostLeftDirection, ForceMode2D.Impulse);
         usedLeftBoost = true;
@@ -187,7 +191,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void OnBoostRight()
     {
-        if (usedRightBoost) return;
+        if (usedRightBoost || !canBoostRight) return;
 
         rb.AddForce(boostForce * boostRightDirection, ForceMode2D.Impulse);
         usedRightBoost = true;
@@ -197,7 +201,7 @@ public class PlayerMovementScript : MonoBehaviour
     }
     public void OnBoostUp()
     {
-        if (usedUpBoost) return;
+        if (usedUpBoost || !canBoostUp) return;
 
         rb.AddForce(boostForce * boostUpDirection, ForceMode2D.Impulse);
         usedUpBoost = true;
