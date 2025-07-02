@@ -1,5 +1,3 @@
 Todo:
 
-music
-button hover sounds
 powerups to unlock boost
