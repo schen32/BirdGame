@@ -1,5 +1,7 @@
 # SecondGame
+Download the Game: https://sinnohe.itch.io/untitled-bird-game
 
+## Screenshots
 ![Screenshot 2025-07-01 235032](https://github.com/user-attachments/assets/0f9c890d-c3e7-4317-ad95-626f119732c9)
 
 ![Screenshot 2025-07-01 235043](https://github.com/user-attachments/assets/1e319491-6658-4c83-a76e-294b23e3152d)
