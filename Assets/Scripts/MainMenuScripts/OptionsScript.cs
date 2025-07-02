@@ -31,8 +31,10 @@ public class OptionsScript : MonoBehaviour
         PlayerPrefs.SetFloat("volume", volume);
     }
 
-    public void SetFullscreen(bool isFullscreen)
+    public void SetFullscreen(bool input)
     {
+        bool isFullscreen = fullscreenToggle.isOn;
+
         Screen.fullScreen = isFullscreen;
         PlayerPrefs.SetInt("fullscreen", isFullscreen ? 1 : 0);
     }
