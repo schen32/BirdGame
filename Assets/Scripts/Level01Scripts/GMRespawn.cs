@@ -8,6 +8,8 @@ public class GMRespawn : MonoBehaviour
     public AudioClip deathSound;
     public AudioClip respawnSound;
 
+    public int timesDied = 0;
+
     AudioSource audioSource;
     Transform pTrans;
 
@@ -46,6 +48,7 @@ public class GMRespawn : MonoBehaviour
 
     private IEnumerator RespawnCoroutine()
     {
+        timesDied++;
         // Play explosion or particles BEFORE teleporting
         respawnParticles.transform.position = pTrans.position;
         respawnParticles.Play();
