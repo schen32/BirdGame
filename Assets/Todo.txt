@@ -1,5 +1,5 @@
 Todo:
 
 music
-scene transitions
+button hover sounds
 powerups to unlock boost
