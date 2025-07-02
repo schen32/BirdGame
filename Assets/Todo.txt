@@ -1,6 +1,5 @@
 Todo:
 
-main menu
 music
-boost animation
+scene transitions
 powerups to unlock boost
